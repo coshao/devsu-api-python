@@ -1,0 +1,31 @@
+name: Devsu Pipeline
+on:
+    push:
+        branches: [ "main", "master"]
+    pull_request: 
+        branches: [ "main", "master"]
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+        
+        steps:
+            - name: Checkout del codigo
+              uses: actions/checkout@v3
+
+            - name: Configuracion del python 3.11
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.11.3'
+            - name: Instalando dependencias
+              run: |
+                python -m pip install --upgrade pip
+                pip install -r requirements.txt
+            - name: Ejecutando tests
+              run: | 
+                python manage.py test
+            - name: Probando build de la imagen
+              run: |
+                docker build -t devsu-api-test .
+
+
+        
