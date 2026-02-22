@@ -29,10 +29,13 @@ jobs:
                 flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
             - name: Ejecutando tests con cobertura
+              env:
+                DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+                DATABASE_NAME: "db.sqlite3"
               run: | 
                 coverage run manage.py test
                 coverage report -m
-                        
+
             - name: Logueandose en Docker hub
               uses: docker/login-action@v2
               with:
